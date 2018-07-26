@@ -6,8 +6,7 @@ h5py
 
 # NLP core libraries
 gensim>=3.3.0
-nlpre>=1.2.0
-pattern
+nlpre>=1.2.1
 flashtext
 unidecode
 
