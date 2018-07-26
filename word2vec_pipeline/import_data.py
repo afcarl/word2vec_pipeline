@@ -12,6 +12,7 @@ import itertools
 from utils.os_utils import mkdir, grab_files
 from utils.parallel_utils import jobmap
 import nlpre
+from builtins import map
 
 import logging
 logger = logging.getLogger(__name__)
@@ -48,8 +49,9 @@ def clean_row(row):
     Returns:
         row: the same row of text converted to unicode
     '''
-    for key, val in row.iteritems():
-        row[key] = parser_unicode(map_to_unicode(val))
+    for (key, val) in row.items():
+        #row[key] = parser_unicode(map_to_unicode(val))
+        row[key] = parser_unicode(val)
     return row
 
 
@@ -69,12 +71,13 @@ def csv_iterator(f_csv, clean=True, _PARALLEL=False):
         if clean and _PARALLEL:
             CSV = jobmap(clean_row, CSV, FLAG_PARALLEL=_PARALLEL)
         elif clean and not _PARALLEL:
-            CSV = itertools.imap(clean_row, CSV)
+            CSV = map(clean_row, CSV)
 
         try:
             for row in CSV:
                 yield row
-        except Exception:
+        except Exception as EX:
+            print(EX)
             pass
 
 # Any reason it takes a list as an input, instead of the 4 parameters?
@@ -104,7 +107,7 @@ def import_csv(item):
 
         for row in csv_iterator(f_csv):
 
-            output = {"_ref": _ref_counter.next()}
+            output = {"_ref": next(_ref_counter)}
 
             if not has_checked_keys:
                 for key in merge_columns:

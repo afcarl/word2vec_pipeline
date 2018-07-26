@@ -37,4 +37,6 @@ bounter
 
 # For CLI interface
 docopt
-fabric==1.14.0
+
+# To use in both python2/3
+future
