@@ -7,7 +7,7 @@ import tqdm
 import simple_config
 import csv
 import os
-from os_utils import grab_files
+from .os_utils import grab_files
 
 
 def CSV_list_columns(f_csv):
@@ -18,14 +18,14 @@ def CSV_list_columns(f_csv):
         f_csv (string): Location of the .csv file
 
     Returns:
-        return tuple(reader.next()): DOCUMENTATION_UNKNOWN
+        return tuple(next(reader)): DOCUMENTATION_UNKNOWN
     """
     if not os.path.exists(f_csv):
         msg = "File not found {}".format(f_csv)
         raise IOError(msg)
     with open(f_csv, 'rb') as FIN:
         reader = csv.reader(FIN)
-        return tuple(reader.next())
+        return tuple(next(reader))
 
 
 class CSV_database_iterator(object):
@@ -104,7 +104,7 @@ class CSV_database_iterator(object):
 
     def next(self):
         self._update_progress_bar()
-        return self.iter_state.next()
+        return next(self.iter_state)
 
     def _iterate_items(self):
         '''
